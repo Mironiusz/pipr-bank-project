@@ -187,7 +187,7 @@ class App(tk.Tk):
             font=(retro_font, 20))
         self.loan_add_error.grid(column=0, row=6, pady=(50, 0), columnspan=2)
 
-        # podgląd kredytów
+        # strona zwierająca podgląd kredytów
         check_data_center = ttk.Frame(check_data_page)
         check_data_center.pack(expand=True, fill="y", pady=(50, 0))
 
@@ -255,15 +255,18 @@ class App(tk.Tk):
             command=self.time_forward)
         time_forward_button.grid(column=0, row=1)
 
+    # funkcja odświeżająca wyświetlane wartości dotyczące klientów
     def refresh_clients(self):
         self.clients = functions.refresh_c_write()
         self.loan_client_entry.configure(values=self.clients)
         self.select_client_entry.configure(values=self.clients)
 
+    # funkcja odświeżająca klientów, którzy mają kredyt
     def refresh_clients_with_loans(self):
         self.clients_with_loans = functions.refresh_cwl_write()
         self.select_client_entry.configure(values=self.clients_with_loans)
 
+    # funkcja odświeżająca inforamcje o kredytach
     def refresh_loans(self):
         loans = []
         client_id = self.select_client_entry.get()
@@ -283,24 +286,28 @@ class App(tk.Tk):
                 text=f"Pozostało do spłaty: {remaining_amount} zł w"
                 f" {float(loan[5])} miesięcy")
 
+    # funkcja odświeżająca stan konta banku
     def refresh_bank(self):
         bank = 0
         with open("bank.txt", "r") as file:
             bank = float(file.read())
         self.check_budget_label.configure(text=f"Bank ma na koncie {bank} zł")
 
+    # funkcja odświeżająca wszystko
     def refresh_data(self, event):
         self.refresh_clients()
         self.refresh_loans()
         self.refresh_bank()
         self.refresh_clients_with_loans()
 
+    # funkcja dodająca klienta
     def add_client(self):
         client = Client()
         client.first_name = self.new_client_first_name.get()
         client.last_name = self.new_client_last_name.get()
         functions.add_client_write(client)
 
+    # funkcja dodająca kredyt, zawiera zabezpieczenia
     def add_loan(self):
         loan = Loan()
         loan.client_id = self.loan_client.get()
@@ -341,13 +348,19 @@ class App(tk.Tk):
             loan.installments = installments
             loan.installment_amount = installment_amount
             functions.add_loan_write(loan)
+            error = "Kredyt dodany prawidłowo"
+            print(error)
+            self.loan_add_error.configure(text=error)
         else:
-            print("Nie udało się udzielić kredytu. Bank jest zbyt biedny")
+            error = "Nie udało się udzielić kredytu. Bank jest zbyt biedny"
+            print(error)
+            self.loan_add_error.configure(text=error)
 
+    # funkcja zmieniająca stan konta banku
     def update_bank(self, amount_to_subtract):
-        functions.update_bank(amount_to_subtract)
-        return 1
+        return functions.update_bank(amount_to_subtract)
 
+    # funkcja odpowiedzialna za przyspieszenie czasu
     def time_forward(self):
         functions.time_forward()
         self.refresh_data(1)

@@ -36,13 +36,17 @@ def update_bank(amount_to_subtract):
     with open("bank.txt", "r") as file:
         current_amount = float(file.read())
 
-    if current_amount - amount_to_subtract < 0:
-        return 0
-
     new_amount = current_amount - amount_to_subtract
+
+    if new_amount < 0:
+        with open("bank.txt", "w") as file:
+            file.write(str(current_amount))
+        return 0
 
     with open("bank.txt", "w") as file:
         file.write(str(new_amount))
+
+    return 1
 
 
 def add_client_write(client):
