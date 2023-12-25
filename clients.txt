@@ -1,0 +1,24 @@
+1,szef,szefowy
+3,szef,szefowy
+2,menel,menelowy
+4,menel,menelowy
+5,ï¿½ul,ï¿½ulowy
+6,Å¼ul,Å¼ulowy
+7,szefon,szefonowy
+8,szefon,szefonowy
+9,ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½
+10,aï¿½l,ï¿½la
+11,twï¿½j,stary
+12,asd,dfg
+13,pajac ,pajacowy
+14,wujek,adolf
+15,wujek,jï¿½zef
+16,sigma,sigmowy
+17,xD,xDowy
+18,qwe,ert
+19,miron,mironko
+20,Nowy,Klient
+21,Nowy,Klient
+22,seba,sebastian
+23,,
+24,ó³,³³
