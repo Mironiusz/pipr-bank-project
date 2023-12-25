@@ -29,7 +29,7 @@ class App(tk.Tk):
         self.current_client = tk.StringVar()
 
         # root window
-        self.title("Bank Simulator 2002")
+        self.title("Bank Simulator 95")
         self.geometry("1600x900")
         self.style = ttk.Style(self)
         self.style.theme_use("classic")
@@ -102,14 +102,26 @@ class App(tk.Tk):
 
         main_page_header = ttk.Label(
             main_page_center,
-            text="Witaj w aplikacji banku!",
+            text="Witaj w Bank Simulator 95!",
             font=(retro_font, 60))
         main_page_header.grid(column=0, row=0)
 
         main_page_text = ttk.Label(
             main_page_center,
-            text="Lorem ispum "
-            "Dolor sit amet",
+            text="Witaj w Bank Simulator 95! \n\n"
+                 "Aplikacja symuluje udzielanie kredytów klientom banku."
+                 " Ponieważ posiada tylko podstawowe funkcje, jest utrzymana "
+                 "w stylistyce klasycznych systemów Windows. \n\n"
+                 "W zakładce „Dodaj Klienta” możesz dodawać klientów "
+                 "do bazy danych banku. \n\n"
+                 "W zakładce „Dodaj Kredyt” możesz udzielić kredytu "
+                 "użytkownikowi uprzednio dodanemu do bazy danych. \n\n"
+                 "W zakładce „Podgląd Danych” masz dostęp do najważniejszej "
+                 "części aplikacji – możesz zobaczyć, ile pieniędzy bank ma "
+                 "na koncie oraz ile czasu klienci będą spłacać "
+                 "swoje zobowiązania. Masz też tutaj dostęp do przewijania"
+                 " czasu – możesz dzięki temu sprawdzić "
+                 "stan konta po upłynięciu kilku miesięcy",
             font=(retro_font, 20),
             wraplength=800)
         main_page_text.grid(column=0, row=1)
@@ -176,7 +188,7 @@ class App(tk.Tk):
 
         loan_submit = ttk.Button(
             loan_page_center,
-            text="Zaakceptuj Kredyt",
+            text="Udziel Kredytu",
             width=30,
             command=self.add_loan)
         loan_submit.grid(column=0, row=5, columnspan=2, pady=(50, 0))
@@ -202,13 +214,13 @@ class App(tk.Tk):
 
         self.check_budget_label = ttk.Label(
             check_budget_frame,
-            text="Bank ma na koncie 00 zł",
+            text="Bank ma na koncie 0 zł",
             font=(retro_font, 20))
         self.check_budget_label.pack()
 
         select_client_label = ttk.Label(
             select_client_frame,
-            text="Wybierz klienta",
+            text="Wybierz klienta: ",
             font=(retro_font, 20))
         select_client_label.grid(column=0, row=0)
 

@@ -1,1 +1,8 @@
-Jak zapewne widzisz, projekt jest w trakcie wykonywania
+Program napisany przez: Rafał Mironko
+
+Program jest symulatorem banku udzielającego kredytów swoim klientom.
+Umożliwia klientom branie kredytów na różne kwoty i z różnym oprocentowaniem.
+Kredyt jest uproszczony - zmiennymi są: oprocentowanie, liczba rat, kwota.
+Program jest graficzny i interaktywny.
+Symulator umożliwia przyspieszenie czasu - można zobaczyć, jaki jest stan zadłużenia klientów i stan banku po upływie kilku miesięcy.
+
