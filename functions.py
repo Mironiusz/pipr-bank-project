@@ -3,33 +3,34 @@ from itertools import count
 from client import Client
 
 
-def time_forward():
-    months_to_skip = 1
-    loans = []
-    with open("loans.txt", "r") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            loans.append(row)
+def time_forward(total_months):
+    for i in range(int(total_months)):
+        months_to_skip = 1
+        loans = []
+        with open("loans.txt", "r") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                loans.append(row)
 
-    for loan in loans:
-        remaining_months = int(loan[5]) - months_to_skip
-        if remaining_months < 0:
-            remaining_months = 0
-            continue
+        for loan in loans:
+            remaining_months = int(loan[5]) - months_to_skip
+            if remaining_months < 0:
+                remaining_months = 0
+                continue
 
-        loan[5] = str(remaining_months)
+            loan[5] = str(remaining_months)
 
-        amount_paid = float(loan[6])
-        with open("bank.txt", "r") as bank_file:
-            bank_balance = float(bank_file.read())
+            amount_paid = float(loan[6])
+            with open("bank.txt", "r") as bank_file:
+                bank_balance = float(bank_file.read())
 
-        bank_balance += amount_paid
-        with open("bank.txt", "w") as bank_file:
-            bank_file.write(str(bank_balance))
+            bank_balance += amount_paid
+            with open("bank.txt", "w") as bank_file:
+                bank_file.write(str(round(bank_balance, 2)))
 
-    with open("loans.txt", "w", newline='') as file:
-        writer = csv.writer(file)
-        writer.writerows(loans)
+        with open("loans.txt", "w", newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(loans)
 
 
 def update_bank(amount_to_subtract):
@@ -40,11 +41,11 @@ def update_bank(amount_to_subtract):
 
     if new_amount < 0:
         with open("bank.txt", "w") as file:
-            file.write(str(current_amount))
+            file.write(str(round(current_amount, 2)))
         return 0
 
     with open("bank.txt", "w") as file:
-        file.write(str(new_amount))
+        file.write(str(round(new_amount, 2)))
 
     return 1
 
@@ -78,7 +79,7 @@ def add_loan_write(loan):
         writer.writerow(
             [loan_id, loan.client_id, loan.amount, loan.percentage,
                 loan.installments, loan.installments,
-                loan.installment_amount])
+                round(loan.installment_amount, 2)])
 
 
 def refresh_cwl_write():

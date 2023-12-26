@@ -28,6 +28,9 @@ class App(tk.Tk):
         # wybór klienta do sprawdzenia
         self.current_client = tk.StringVar()
 
+        # ilość miesięcy do przesunięcia czasu
+        self.months_forward = 0
+
         # root window
         self.title("Bank Simulator 95")
         self.geometry("1600x900")
@@ -71,11 +74,11 @@ class App(tk.Tk):
             font=(retro_font, 20))
         add_client_first_name_label.grid(column=0, row=1, pady=(50, 50))
 
-        add_client_first_name_entry = ttk.Entry(
+        self.add_client_first_name_entry = ttk.Entry(
             add_client_center,
             font=(retro_font, 20),
             textvariable=self.new_client_first_name)
-        add_client_first_name_entry.grid(column=1, row=1)
+        self.add_client_first_name_entry.grid(column=1, row=1)
 
         add_client_last_name_label = ttk.Label(
             add_client_center,
@@ -83,11 +86,11 @@ class App(tk.Tk):
             font=(retro_font, 20))
         add_client_last_name_label.grid(column=0, row=2)
 
-        add_client_last_name_entry = ttk.Entry(
+        self.add_client_last_name_entry = ttk.Entry(
             add_client_center,
             font=(retro_font, 20),
             textvariable=self.new_client_last_name)
-        add_client_last_name_entry.grid(column=1, row=2)
+        self.add_client_last_name_entry.grid(column=1, row=2)
 
         add_client_submit = ttk.Button(
             add_client_center,
@@ -95,6 +98,13 @@ class App(tk.Tk):
             width=30,
             command=self.add_client)
         add_client_submit.grid(column=0, row=3, columnspan=2, pady=(50, 0))
+
+        self.add_client_error_label = ttk.Label(
+            add_client_center,
+            text="",
+            font=(retro_font, 20))
+        self.add_client_error_label.grid(
+            column=0, row=4, columnspan=2, pady=(50, 0))
 
         # strona główna
         main_page_center = ttk.Frame(main_page)
@@ -156,11 +166,11 @@ class App(tk.Tk):
             font=(retro_font, 20))
         loan_amount_label.grid(column=0, row=2, pady=(50, 0))
 
-        loan_amount_entry = ttk.Entry(
+        self.loan_amount_entry = ttk.Entry(
             loan_page_center,
             font=(retro_font, 20),
             textvariable=self.loan_amount)
-        loan_amount_entry.grid(column=1, row=2, pady=(50, 0))
+        self.loan_amount_entry.grid(column=1, row=2, pady=(50, 0))
 
         loan_percentage_label = ttk.Label(
             loan_page_center,
@@ -168,11 +178,11 @@ class App(tk.Tk):
             font=(retro_font, 20))
         loan_percentage_label.grid(column=0, row=3, pady=(50, 0))
 
-        loan_percentage_entry = ttk.Entry(
+        self.loan_percentage_entry = ttk.Entry(
             loan_page_center,
             font=(retro_font, 20),
             textvariable=self.loan_percentage)
-        loan_percentage_entry.grid(column=1, row=3, pady=(50, 0))
+        self.loan_percentage_entry.grid(column=1, row=3, pady=(50, 0))
 
         loan_installment_label = ttk.Label(
             loan_page_center,
@@ -180,11 +190,11 @@ class App(tk.Tk):
             font=(retro_font, 20))
         loan_installment_label.grid(column=0, row=4, pady=(50, 0))
 
-        loan_installment_entry = ttk.Entry(
+        self.loan_installment_entry = ttk.Entry(
             loan_page_center,
             font=(retro_font, 20),
             textvariable=self.loan_installment)
-        loan_installment_entry.grid(column=1, row=4, pady=(50, 0))
+        self.loan_installment_entry.grid(column=1, row=4, pady=(50, 0))
 
         loan_submit = ttk.Button(
             loan_page_center,
@@ -254,18 +264,25 @@ class App(tk.Tk):
             font=(retro_font, 20))
         self.check_loan_label3.grid(column=0, row=2, pady=(25, 0))
 
-        time_forward_label = ttk.Label(
+        self.time_forward_label = ttk.Label(
             time_forward_frame,
-            text="Przewiń czas o miesiąc do przodu",
+            text="Ilość miesięcy do przewinięcia: 0",
             font=(retro_font, 20))
-        time_forward_label.grid(column=0, row=0)
+        self.time_forward_label.grid(column=0, row=0)
+
+        self.time_forward_silder = ttk.Scale(
+            time_forward_frame,
+            from_=0, to=1,
+            length=300,
+            orient="horizontal", command=self.change_months)
+        self.time_forward_silder.grid(column=0, row=1, pady=(25, 25))
 
         time_forward_button = ttk.Button(
             time_forward_frame,
             text="Przewiń",
             width=30,
             command=self.time_forward)
-        time_forward_button.grid(column=0, row=1)
+        time_forward_button.grid(column=0, row=2)
 
     # funkcja odświeżająca wyświetlane wartości dotyczące klientów
     def refresh_clients(self):
@@ -278,7 +295,7 @@ class App(tk.Tk):
         self.clients_with_loans = functions.refresh_cwl_write()
         self.select_client_entry.configure(values=self.clients_with_loans)
 
-    # funkcja odświeżająca inforamcje o kredytach
+    # funkcja odświeżająca informacje o kredytach
     def refresh_loans(self):
         loans = []
         client_id = self.select_client_entry.get()
@@ -293,17 +310,19 @@ class App(tk.Tk):
         for loan in loans:
             self.check_loan_label2.configure(
                 text=f"Wypożyczona Kwota: {loan[2]} zł")
-            remaining_amount = float(loan[6]) * float(loan[5])
+            rem_amount = round(float(loan[6]), 2) * round(float(loan[5]), 2)
             self.check_loan_label3.configure(
-                text=f"Pozostało do spłaty: {remaining_amount} zł w"
+                text=f"Pozostało do spłaty: {round(rem_amount, 2)} zł w"
                 f" {float(loan[5])} miesięcy")
+            self.time_forward_silder.configure(to=int(loan[5]))
 
     # funkcja odświeżająca stan konta banku
     def refresh_bank(self):
         bank = 0
         with open("bank.txt", "r") as file:
             bank = float(file.read())
-        self.check_budget_label.configure(text=f"Bank ma na koncie {bank} zł")
+        self.check_budget_label.configure(
+            text=f"Bank ma na koncie {bank:,} zł")
 
     # funkcja odświeżająca wszystko
     def refresh_data(self, event):
@@ -317,7 +336,20 @@ class App(tk.Tk):
         client = Client()
         client.first_name = self.new_client_first_name.get()
         client.last_name = self.new_client_last_name.get()
+
+        if client.first_name == "" or client.last_name == "":
+            error = "Nieprawidłowa wartość"
+            self.add_client_error_label.configure(text=error)
+            print(error)
+            return
+
         functions.add_client_write(client)
+        self.add_client_first_name_entry.delete(0, "end")
+        self.add_client_last_name_entry.delete(0, "end")
+
+        error = "Udało się dodać klienta"
+        self.add_client_error_label.configure(text=error)
+        print(error)
 
     # funkcja dodająca kredyt, zawiera zabezpieczenia
     def add_loan(self):
@@ -351,6 +383,9 @@ class App(tk.Tk):
             print(error)
             return
 
+        if amount == 0 or installments == 0:
+            return
+
         interest_rate = percentage / 100 + 1
         installment_amount = amount * interest_rate / installments
 
@@ -363,6 +398,11 @@ class App(tk.Tk):
             error = "Kredyt dodany prawidłowo"
             print(error)
             self.loan_add_error.configure(text=error)
+
+            self.loan_amount_entry.delete(0, "end")
+            self.loan_installment_entry.delete(0, "end")
+            self.loan_percentage_entry.delete(0, "end")
+
         else:
             error = "Nie udało się udzielić kredytu. Bank jest zbyt biedny"
             print(error)
@@ -374,5 +414,10 @@ class App(tk.Tk):
 
     # funkcja odpowiedzialna za przyspieszenie czasu
     def time_forward(self):
-        functions.time_forward()
+        functions.time_forward(self.months_forward)
         self.refresh_data(1)
+
+    def change_months(self, value):
+        self.months_forward = round(float(value))
+        self.time_forward_label.configure(
+                text=f"Ilość miesięcy do przewinięcia: {self.months_forward}")

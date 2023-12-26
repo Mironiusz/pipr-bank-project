@@ -21,7 +21,7 @@ def test_time_forward():
     with open('bank.txt', 'w') as file:
         file.write('1000')
 
-    functions.time_forward()
+    functions.time_forward(2)
 
     with open('loans.txt', 'r', newline='') as file:
         reader = csv.reader(file)
@@ -29,12 +29,12 @@ def test_time_forward():
         for row in reader:
             last_row = row
 
-        assert last_row == ['1', '1', '1000', '5', '12', '11', '100']
+        assert last_row == ['1', '1', '1000', '5', '12', '10', '100']
 
     with open('bank.txt', 'r') as file:
         balance = float(file.read())
 
-        assert balance == 1100.0
+        assert balance == 1200.0
 
     with open("bank.txt", 'w') as file:
         file.write(str(bank_start))
@@ -85,7 +85,7 @@ def test_add_loan():
     with open("loans.txt", 'r') as file:
         lines = file.readlines()
 
-    loan = Loan('1', '1', '1000', '5', '12', '12', '100')
+    loan = Loan('1', '1', '1000', '5', '12', '12', 100)
     functions.add_loan_write(loan)
 
     with open('loans.txt', 'r', newline='') as file:
@@ -115,7 +115,7 @@ def test_refresh_cwl():
 
     client = Client("", "Nowy", "Klient")
     client = functions.add_client_write(client)
-    loan = Loan("", client.client_id, "1000", "5", "12", "12", "100")
+    loan = Loan("", client.client_id, "1000", "5", "12", "12", 100)
     functions.add_loan_write(loan)
 
     cwl = functions.refresh_cwl_write()
