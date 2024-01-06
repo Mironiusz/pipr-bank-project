@@ -1,10 +1,18 @@
 import csv
 from itertools import count
 from client import Client
+from datetime import datetime, timedelta
 
 
 def time_forward(total_months):
+    """
+    Ta funkcja służy do przesuwania czasu do przodu. Wykonuje się tyle razy,
+    o ile miesięcy użytkownik postanowi przesunąć czas. Wykonuje także
+    wszystkie operacje, jakie wiążą się z przesuwaniem czasu (poprzez
+    wywołanie odpowiednich funkcji) - płatności, zmiana stanu aktywów banku.
+    """
     for i in range(int(total_months)):
+        add_month()
         months_to_skip = 1
         loans = []
         with open("loans.txt", "r") as file:
@@ -34,6 +42,9 @@ def time_forward(total_months):
 
 
 def update_bank(amount_to_subtract):
+    """
+    Ta funkcja ma na celu zmianę stanu aktywów banku o podaną wartość
+    """
     with open("bank.txt", "r") as file:
         current_amount = float(file.read())
 
@@ -51,6 +62,9 @@ def update_bank(amount_to_subtract):
 
 
 def add_client_write(client):
+    """
+    Ta funkcja zapisuje nowo utworzonego klienta do pliku csv
+    """
     with open('clients.txt', mode='a', newline='') as file:
         writer = csv.writer(file, delimiter=',')
         counter = count(start=1)
@@ -66,6 +80,9 @@ def add_client_write(client):
 
 
 def add_loan_write(loan):
+    """
+    Ta funkcja zapisuje nowo utworzony kredyt do pliku csv
+    """
     with open('loans.txt', mode='a', newline='') as file:
         writer = csv.writer(file)
         counter = count(start=1)
@@ -83,6 +100,10 @@ def add_loan_write(loan):
 
 
 def refresh_cwl_write():
+    """
+    Ta funkcja odświeża listę klientów z kredytami. Pobiera
+    ich z pliku csv i zmienia w format listy
+    """
     clients_with_loans = set()
     clients_with_loans_list = []
 
@@ -105,6 +126,10 @@ def refresh_cwl_write():
 
 
 def refresh_c_write():
+    """
+    Ta funkcja odświeża listę wszystkich klientów zarejestrowanych
+    w banku
+    """
     clients = []
 
     with open('clients.txt', newline='') as file:
@@ -115,3 +140,29 @@ def refresh_c_write():
                 clients.append(f"{client.client_id}. "
                                f"{client.first_name} {client.last_name}")
     return clients
+
+
+def read_date_from_file(file_name):
+    """
+    Ta funkcja odczytuje datę z pliku time.txt
+    """
+    with open(file_name, "r") as file:
+        date_str = file.read().strip()
+        return datetime.strptime(date_str, "%Y-%m-%d")
+
+
+def write_date_to_file(file_name, date):
+    """
+    Ta funkcja zapisuje datę do pliku time.txt
+    """
+    with open(file_name, "w") as file:
+        file.write(date.strftime("%Y-%m-%d"))
+
+
+def add_month():
+    """
+    Ta funkcja dodaje miesiąc (30 dni) do daty pobranej z pliku csv
+    """
+    date_from_file = read_date_from_file("time.txt")
+    new_date = date_from_file + timedelta(days=30)
+    write_date_to_file("time.txt", new_date)

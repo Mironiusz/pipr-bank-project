@@ -222,6 +222,13 @@ class App(tk.Tk):
         time_forward_frame = ttk.Frame(check_data_center)
         time_forward_frame.grid(column=0, row=3)
 
+        self.show_date_label = ttk.Label(
+            check_budget_frame,
+            text=f"Dzisiaj jest "
+            f"{functions.read_date_from_file('time.txt').date()}",
+            font=(retro_font, 20))
+        self.show_date_label.pack()
+
         self.check_budget_label = ttk.Label(
             check_budget_frame,
             text="Bank ma na koncie 0 zł",
@@ -272,7 +279,7 @@ class App(tk.Tk):
 
         self.time_forward_silder = ttk.Scale(
             time_forward_frame,
-            from_=0, to=1,
+            from_=0, to=100,
             length=300,
             orient="horizontal", command=self.change_months)
         self.time_forward_silder.grid(column=0, row=1, pady=(25, 25))
@@ -314,7 +321,6 @@ class App(tk.Tk):
             self.check_loan_label3.configure(
                 text=f"Pozostało do spłaty: {round(rem_amount, 2)} zł w"
                 f" {float(loan[5])} miesięcy")
-            self.time_forward_silder.configure(to=int(loan[5]))
 
     # funkcja odświeżająca stan konta banku
     def refresh_bank(self):
@@ -416,6 +422,10 @@ class App(tk.Tk):
     def time_forward(self):
         functions.time_forward(self.months_forward)
         self.refresh_data(1)
+        date_from_file = functions.read_date_from_file("time.txt")
+        new_date = date_from_file.date()
+        self.show_date_label.configure(
+            text=f"Dzisiaj jest {new_date}")
 
     def change_months(self, value):
         self.months_forward = round(float(value))
