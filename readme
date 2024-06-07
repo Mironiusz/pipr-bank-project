@@ -1,69 +1,36 @@
-Program napisany przez: Rafał Mironko
 
-Program jest symulatorem banku udzielającego kredytów swoim klientom.
-Umożliwia klientom branie kredytów na różne kwoty i z różnym oprocentowaniem.
-Kredyt jest uproszczony - jednynymi zmiennymi są: oprocentowanie, liczba rat, wysokość raty.
-Program jest graficzny i interaktywny.
-Symulator umożliwia przyspieszenie czasu - można zobaczyć, jaki jest stan zadłużenia klientów
-i stan aktywów banku po upływie kilku miesięcy.
+# Credit Bank Simulator
 
+## Description
+This is my first object-oriented program, written in the first semester of my studies.
 
-Program jest podzielony na klasy znajdujące się w plikach o takich samych nazwach:
+The program is a simulator of a bank granting loans to its clients. It allows clients to take loans of various amounts and with different interest rates. The loan is simplified - the only variables are: interest rate, number of installments, and installment amount. The program is graphical and interactive. The simulator allows for time acceleration - you can see the debt status of clients and the bank's assets after a few months.
 
-- Client - zawiera dane o kliencie. Unikalne id, imię i nazwisko.
-- Loan - zawiera dane o kredycie. Unikalne id, id klienta biorącego pożyczkę,
-        kwota kredytu, oprocentowanie, ilość rat, ilość pozostałych rat, kwota jednej raty.
-- App - zawiera główną część kodu. Całe GUI i logika.
+## Program Structure
+The program is divided into classes located in files with the same names:
 
-Program jest uruchamiany z pliku main.py
+- `Client` - contains client data. Unique id, first and last name.
+- `Loan` - contains loan data. Unique id, id of the client taking the loan, loan amount, interest rate, number of installments, remaining installments, installment amount.
+- `App` - contains the main part of the code. The entire GUI and logic.
 
-Program zawiera plik functions.py, odpowiedzialny za wszystkie powtarzalne funkcje wewnątrz kodu.
+The program is run from the `main.py` file.
 
-Funkcje i wszystkie zmienne są nazwane tak, żeby była znana ich funkcjonalność - nawet kosztem
-długiej nazwy. Do tego są opisane odpowiednimi komentarzami
+The program includes the `functions.py` file, responsible for all repetitive functions within the code.
 
+Functions and all variables are named so that their functionality is known - even at the cost of a long name. They are also described with appropriate comments.
 
-Kluczową częścią programu są trzy pliki tekstowe - bank.txt, clients.txt i loans.txt.
+## Key Text Files
+The key part of the program consists of three text files - `bank.txt`, `clients.txt`, and `loans.txt`.
 
-- bank.txt - przetrzymuje informację o stanie konta banku
-- clients.txt - jest bazą danych o wszystkich klientach, w formacie .csv
-- loans.txt - jest bazą danych o wszystkich kredytach, w formacie .csv
+- `bank.txt` - holds information about the bank's account balance.
+- `clients.txt` - is a database of all clients, in .csv format.
+- `loans.txt` - is a database of all loans, in .csv format.
 
-W pliku bank.txt możemy ustawić początkowy stan konta banku. Robi się to ręcznie zmieniając
-zawartość pliku. Domyślną wartością jest milion złotych.
+In the `bank.txt` file, we can set the initial state of the bank's account. This is done manually by changing the content of the file. The default value is one million złotych.
 
-W plikach loans.txt i clients.txt możemy ręcznie usunąć kredyty i klientów. Nie zaleca się
-ręcznie dodawać nowych wartości ani modyfikować istniejących.
+In the `loans.txt` and `clients.txt` files, we can manually remove loans and clients. It is not recommended to manually add new values or modify existing ones.
 
-Plik test_Bank.py zawiera testy jednostkowe funkcji z pliku functions.py
+The `test_Bank.py` file contains unit tests for functions from the `functions.py` file.
 
-
-ZAKRES WYKONANYCH PRAC - CZĘŚĆ REFLEKSYJNA
-
-Jestem zadowolony z programu, który napisałem. Mimo mojego braku doświadczenia w programowaniu
-w językach opartych na klasach i widocznych naleciałości z języków eventowo-funkcyjno-reaktywnych
-(javascript, Vue.js), program działa, a kod jest czytelny.
-
-Chciałem dodać do programu trochę więcej narracji, jak to się stało, że jest rok 1995,
-dodać funkcjonalność związaną z nowymi stylami graficznymi podczas przyspieszania czasu,
-jednak okazało się to bardzo czasochłonne i trudne. Konieczność wykorzystania wielowątkowości,
-dodatkowych messageboxów, pasków wczytywania i refaktoryzacja plików tekstowych skutecznie zniechęciła
-mnie do wdrożenia tego pomysłu.
-
-Prawdopodobnie powinienem od początku lepiej rozplanować podział na klasy pliku app.py,
-zamiast wrzucać wszystko do jednej klasy App. Przez brak dogłębnej znajomości biblioteki tkinter
-często trafiałem na problemy w rozdzielaniu tworzenia elementów GUI od ich wywoływania w głównym pliku.
-Jest to rzecz, która zdecydowanie wymaga poprawy w moich przyszłych projektach.
-
-Podobnym problemem był dla mnie brak znajomości wzorców projektowych języków opartych na klasach.
-W internecie znalazłem trochę informacji, jednak były albo szczątkowe, albo bardzo niejasne.
-Uważam, że przed wykonaniem takiego projektu powinniśmy zostać chociaż w niewielkim stopniu
-przeszkoleni z obowiązujących wzorców projektowych. Bez tego wszyscy, którzy nie mieli wcześniej
-doświadczenia w planowaniu struktury kodu, mają bardzo utrudnione zadanie i nie wiedzą, na co zwracać uwagę.
-
-Największą przeszkodą był dla mnie sam Python i konstruowanie klas rozbitych na kilka plików.
-Nie byłem w stanie stworzyć funkcji w zewnętrzym pliku używającej argumentu self głównej klasy.
-Nie wiedziałem też, jak mogę rozdzielić niektóre elementy tkintera od głównej klasy - głównie
-przez konieczność konfigurowania ich z poziomu funkcji. Przez to, że funkcje mają lokalny scope, jeśli
-nie podamy im argumentu self, nie jesteśmy w stanie konfigurować elementów tkintera z poziomu
-zewnętrznych funkcji. Dlatego umieściłem je wewnątrz App.
+## Author
+Program written by: Rafał Mironko
